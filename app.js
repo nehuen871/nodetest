@@ -4,7 +4,8 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var lessMiddleware = require('less-middleware');
 var logger = require('morgan');
-
+var { mongoose } = require('./database');
+/*Carga los archivos*/
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var testRouter = require('./routes/test');
@@ -15,13 +16,17 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hjs');
 
-app.use(logger('dev'));
+app.use(logger('dev'));/*utiliza morgan para mostrar los llamados a dev que esta seteado en package.json */
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(lessMiddleware(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(logger('dev')); // modulo para mostrar los llamado en la consola
+
+/*Define el formato de las url para acceder a los archivos*/
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/test', testRouter);
